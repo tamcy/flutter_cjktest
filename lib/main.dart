@@ -67,6 +67,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const demoWord = '遍';
 
+  bool specifyLocaleInWidget = false;
+
   LocaleController getLocaleController(BuildContext context) {
     final scaffoldState = context.ancestorStateOfType(new TypeMatcher<MyAppState>()) as MyAppState;
     return scaffoldState.localeController;
@@ -75,6 +77,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Locale currentLocale = getLocaleController(context).locale;
+
+    TextStyle textStyle = new TextStyle(
+      fontSize: 128.0,
+    );
+
+    if (specifyLocaleInWidget) {
+      textStyle = textStyle.copyWith(locale: currentLocale);
+    }
+
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('${widget.title}'),
@@ -95,18 +106,58 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               new Padding(padding: EdgeInsets.only(bottom: 16.0)),
-              new Text('Default: ${defaultLocale.toString()}; Current: ${currentLocale.toString()}', style:
-                new TextStyle(fontWeight: FontWeight.w600),),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Checkbox(
+                      value: specifyLocaleInWidget,
+                      onChanged: (bool value) {
+                        setState(() {
+                          specifyLocaleInWidget = value;
+                        });
+                      }),
+                  new Text('Specify locale in widget'),
+                ],
+              ),
               new Padding(padding: EdgeInsets.only(bottom: 16.0)),
-              new Text('Showing that locale is changed property:', style: new TextStyle(color: Colors.grey),),
+              new Text(
+                'Default: ${defaultLocale.toString()}; Current: ${currentLocale.toString()}',
+                style: new TextStyle(fontWeight: FontWeight.w600),
+              ),
+              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
+              new Text(
+                'Showing that locale is changed property:',
+                style: new TextStyle(color: Colors.grey),
+              ),
               new Text(MaterialLocalizations.of(context).closeButtonTooltip),
-              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
+              new Padding(padding: EdgeInsets.only(bottom: 32.0)),
               //
-              new Text('Custom font:', style: new TextStyle(color: Colors.grey),),
-              new Text(demoWord, style: new TextStyle(fontSize: 128.0, fontFamily: 'LoclTest')),
-              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
-              new Text('System font:', style: new TextStyle(color: Colors.grey),),
-              new Text(demoWord, style: new TextStyle(fontSize: 128.0)),
+              new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: new Column(
+                      children: <Widget>[
+                        new Text(
+                          'Custom font:',
+                          style: new TextStyle(color: Colors.grey),
+                        ),
+                        new Text(demoWord, style: textStyle.copyWith(fontFamily: 'LoclTest')),
+                      ],
+                    ),
+                  ),
+                  new Expanded(
+                    child: new Column(
+                      children: <Widget>[
+                        new Text(
+                          'System font:',
+                          style: new TextStyle(color: Colors.grey),
+                        ),
+                        new Text(demoWord, style: textStyle),
+                      ],
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ));
