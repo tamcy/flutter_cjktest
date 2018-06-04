@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(new MyApp());
 
@@ -34,6 +35,16 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('zh', 'HK'),
+        const Locale('zh', 'TW'),
+        const Locale('zh', 'CN'),
+        const Locale('ja', 'JP'),
+      ],
       locale: _locale,
       title: 'Locale Test',
       theme: new ThemeData(
@@ -66,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Locale currentLocale = getLocaleController(context).locale;
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('${widget.title} : ${currentLocale.toString()}'),
+          title: new Text('${widget.title}'),
         ),
         body: new Center(
           child: new Column(
@@ -83,11 +94,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   new ChangeLocaleButton(const Locale('zh', 'CN')),
                 ],
               ),
-              new Padding(padding: EdgeInsets.only(bottom: 8.0)),
-              new Text('Custom font:'),
+              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
+              new Text('Default: ${defaultLocale.toString()}; Current: ${currentLocale.toString()}', style:
+                new TextStyle(fontWeight: FontWeight.w600),),
+              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
+              new Text('Showing that locale is changed property:', style: new TextStyle(color: Colors.grey),),
+              new Text(MaterialLocalizations.of(context).closeButtonTooltip),
+              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
+              //
+              new Text('Custom font:', style: new TextStyle(color: Colors.grey),),
               new Text(demoWord, style: new TextStyle(fontSize: 128.0, fontFamily: 'LoclTest')),
-              new Padding(padding: EdgeInsets.only(bottom: 8.0)),
-              new Text('System font:'),
+              new Padding(padding: EdgeInsets.only(bottom: 16.0)),
+              new Text('System font:', style: new TextStyle(color: Colors.grey),),
               new Text(demoWord, style: new TextStyle(fontSize: 128.0)),
             ],
           ),
