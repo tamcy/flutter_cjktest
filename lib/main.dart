@@ -78,13 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Locale currentLocale = getLocaleController(context).locale;
 
-    TextStyle textStyle = new TextStyle(
-      fontSize: 128.0,
-    );
-
-    if (specifyLocaleInWidget) {
-      textStyle = textStyle.copyWith(locale: currentLocale);
-    }
+    TextStyle textStyle =
+        new TextStyle(fontSize: 128.0, locale: specifyLocaleInWidget ? currentLocale : null);
 
     return new Scaffold(
         appBar: new AppBar(
@@ -116,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           specifyLocaleInWidget = value;
                         });
                       }),
-                  new Text('Specify locale in widget'),
+                  new Text('Explicitly specify locale in widget'),
                 ],
               ),
               new Padding(padding: EdgeInsets.only(bottom: 16.0)),
